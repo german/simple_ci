@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe User do
-  let(:subject) {User.new}
+  let(:subject) { User.new }
   
-  it "should be able to create new project"
+  it {should have_many(:projects).dependent(:nullify) }
   
-  it "should be able to delete existing project (created by himself)"
+  it "should be able to create new project" do
+    expect { subject.create_project(project_params) }.to change(Project, :count).by(1)
+  end
   
-  it "should be able to change name of existing project"
-  
-  it "should be able to change path to existing project"
+private
+  def project_params
+    {name: "Test", path_to_rails_root: "/home/german/projects/ruby/simple_ci"}
+  end
 end

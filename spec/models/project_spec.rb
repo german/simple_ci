@@ -1,9 +1,17 @@
 require 'spec_helper'
 
 describe Project do
-  it "should have unique name and path on filesystem"
+  subject { FactoryGirl.create :project }
   
-  it "should have full qualified path"
+  it "have unique name and path on filesystem"
   
-  it "should have rspec/cucumber/test::unit option selected"
+  it "have full qualified path" do
+    subject.path_to_rails_root.should =~ /\/simple_ci/
+  end
+  
+  it "have rspec/cucumber/test::unit option selected"
+  
+  it "have initial state :created" do
+    subject.created?.should == true
+  end
 end
