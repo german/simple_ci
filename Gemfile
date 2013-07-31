@@ -34,9 +34,13 @@ end
 
 group :test do
   gem 'rspec-rails'
+  gem 'shoulda'
 end
 
 gem 'rails_admin'
+gem 'aasm'
+gem 'factory_girl'
+gem 'faker'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
