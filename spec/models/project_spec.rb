@@ -14,4 +14,21 @@ describe Project do
   it "have initial state :created" do
     subject.created?.should == true
   end
+  
+  it "is runnable" do
+    subject.run!
+    subject.running?.should == true
+  end
+  
+  it "is been added to the queue for the performance" do
+    lambda {
+      subject.run!
+    }.should change(TasksQueue.count).by(1)
+  end
+  
+  it "returns line with spec status" do
+    subject.run!
+    subject.status = "..F..*F*"
+    subject.failed?.should == true
+  end
 end
