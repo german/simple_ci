@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Project do
   subject { FactoryGirl.create :project }
   
+  it {should have_many(:builds)}
+  
   it "have unique name and path on filesystem"
   
   it "have full qualified path" do
@@ -23,12 +25,6 @@ describe Project do
   it "is been added to the queue for the performance" do
     lambda {
       subject.run!
-    }.should change(TasksQueue.count).by(1)
-  end
-  
-  it "returns line with spec status" do
-    subject.run!
-    subject.status = "..F..*F*"
-    subject.failed?.should == true
+    }.should change(Build.count).by(1)
   end
 end

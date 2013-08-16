@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130814134409) do
+ActiveRecord::Schema.define(version: 20130815221248) do
+
+  create_table "builds", force: true do |t|
+    t.text     "output"
+    t.integer  "failed_tests"
+    t.integer  "pending_tests"
+    t.integer  "succeeded_tests"
+    t.integer  "project_id",      null: false
+    t.float    "duration"
+    t.string   "aasm_state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "builds", ["project_id"], name: "index_builds_on_project_id"
 
   create_table "projects", force: true do |t|
     t.string   "name"
@@ -20,10 +34,6 @@ ActiveRecord::Schema.define(version: 20130814134409) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "output"
-    t.integer  "failed_tests"
-    t.integer  "pending_tests"
-    t.integer  "succeeded_tests"
   end
 
   add_index "projects", ["user_id"], name: "index_projects_on_user_id"

@@ -1,38 +1,30 @@
-require "bunny"
-
 class Project < ActiveRecord::Base
   include AASM
   
   belongs_to :user
+  has_many :builds
   
   aasm do
     state :created, :initial => true
     state :running
-    state :deploying
+
     state :failure
-    state :tests_success
-    state :deploy_success
-    
-    event :run do
-      transitions :from => [:created, :failure, :tests_success, :deploy_success], :to => :running
-    end
-    
-    event :deploy do
-      transitions :from => [:tests_success], :to => :deploying
-    end
-  end
+    state :success
   
-  def run
-    conn = Bunny.new
-    conn.start
-
-    ch   = conn.create_channel
-    q    = ch.queue(DEFAULT_QUEUE, :durable => true)
-    msg  = Marshal.dump project_id: self.id
-
-    q.publish(msg, :persistent => true)
-    Rails.logger.warn " [#{DEFAULT_QUEUE}] Sent #{msg}"
-
-    conn.close
+    event :run do
+      after do
+        self.builds.create!.run!
+      end
+      
+      transitions :from => [:created, :failure, :success], :to => :running
+    end
+    
+    event :fail do
+      transitions :from => [:running], :to => :failure
+    end
+      
+    event :succeed do
+      transitions :from => [:running], :to => :success
+    end
   end
 end

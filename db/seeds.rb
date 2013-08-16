@@ -6,8 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-if User.count == 0
-  if User.create!(email: 'simple_ci@example.com', password: 'password')
+user = if User.count == 0
+  if u = User.create!(email: 'simple_ci@example.com', password: 'password')
     puts "User with email 'simple_ci@example.com' and with password 'password' was created. Use it to log in into the SimpleCI."
+    u
+  end
+else
+  User.first
+end
+
+if Project.count == 0
+  if Project.create!(name: 'Simple CI', path_to_rails_root: Rails.root.to_s, user: user)
+    puts "Project 'Simple CI' was created."
   end
 end
