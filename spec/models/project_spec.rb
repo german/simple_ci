@@ -3,6 +3,10 @@ require 'spec_helper'
 describe Project do
   subject { FactoryGirl.create :project }
   
+  before do
+    Build.any_instance.stubs(:enqueue_task).returns(true)
+  end
+  
   it {should have_many(:builds)}
   
   it "have unique name and path on filesystem"
@@ -22,9 +26,12 @@ describe Project do
     subject.running?.should == true
   end
   
-  it "is been added to the queue for the performance" do
-    lambda {
-      subject.run!
-    }.should change(Build.count).by(1)
+  it "is creates build when runned" do
+    lambda { subject.run! }.should change(Build, :count).by(1)
+  end
+  
+  it "is creates build when runned" do
+    subject.run!
+    Build.last.running?.should == true
   end
 end

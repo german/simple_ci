@@ -38,7 +38,8 @@ group :doc do
 end
 
 group :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.14.0'
+  gem 'mocha', :require => "mocha/setup"
   gem 'shoulda'
 end
 

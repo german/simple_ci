@@ -5,9 +5,11 @@ describe Build do
   
   it {should belong_to(:project)}
 
-  it "saves spec status" do
+  it "succeeds and the related project also should have success status" do
+    subject.project.created?.should be
+    subject.stubs(:enqueue_task).returns(true)    
     subject.run!
-    subject.status = "..F..*F*"
-    subject.failed?.should == true
+    subject.running?.should be
+    subject.project.running?.should be
   end
 end
