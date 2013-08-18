@@ -27,9 +27,10 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
-# RabbitMQ
+# RabbitMQ as messaging queue
 gem 'bunny'
 
+# Use unicorn as the app server
 gem 'unicorn'
 
 group :doc do
@@ -43,7 +44,7 @@ group :test do
   gem 'shoulda'
 end
 
-gem 'rails_admin'
+gem "devise", '~> 3.0'
 gem 'aasm'
 gem 'factory_girl'
 gem 'faker'
@@ -51,14 +52,8 @@ gem 'faker'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
-
-gem "devise", '~> 3.0'

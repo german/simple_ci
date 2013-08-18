@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="small-3 columns"><%= project.name %></div>
+  <div class="small-3 columns"><%= project.aasm_state %></div>
+  <div class="small-3 columns"><%= link_to "Preferences", preferences_project_path(project) %></div>
+  <div class="small-3 columns"><%= link_to "Run", enqueue_project_path(project), :class => "button small", :remote => true %></div>
+</div>
+<% project.builds.order('updated_at DESC').limit(5).each do |build| %>
+<div class="row">
+  <div class="small-4 columns <%= build.failure? ? 'alert' : 'success' %> label">build #<%= build.id %></div>
+  <div class="small-4 columns"><%= build.aasm_state %></div>
+  <div class="small-4 columns">run <%= time_ago_in_words build.updated_at %> ago</div>
+</div>
+<% end %>
