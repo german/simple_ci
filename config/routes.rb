@@ -1,6 +1,12 @@
 SimpleCi::Application.routes.draw do
   devise_for :users
-  mount RailsAdmin::Engine => '/', :as => 'rails_admin'
+
+  resources :projects do
+    member do
+      get :enqueue, :preferences
+    end
+  end
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

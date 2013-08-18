@@ -19,6 +19,7 @@ task :run_queue => :environment do
       
       puts " [#{DEFAULT_QUEUE}] Received #{params.inspect}"
       output = ""
+      build.run! # transition from :enqueued state to :running
       duration = Benchmark.measure do
         output = `rspec #{build.project.path_to_rails_root}/spec`
       end

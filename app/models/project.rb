@@ -6,25 +6,29 @@ class Project < ActiveRecord::Base
   
   aasm do
     state :created, :initial => true
+    state :enqueued
     state :running
-
     state :failure
     state :success
   
-    event :run do
+    event :enqueue do
       after do
-        self.builds.create!.run!
+        self.builds.create!.enqueue!
       end
       
-      transitions :from => [:created, :failure, :success], :to => :running
+      transitions :from => [:created, :failure, :success], :to => :enqueued
+    end
+    
+    event :run do
+      transitions :from => :enqueued, :to => :running
     end
     
     event :fail do
-      transitions :from => [:running], :to => :failure
+      transitions :from => :running, :to => :failure
     end
       
     event :succeed do
-      transitions :from => [:running], :to => :success
+      transitions :from => :running, :to => :success
     end
   end
 end

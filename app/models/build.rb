@@ -7,13 +7,22 @@ class Build < ActiveRecord::Base
   
   aasm do
     state :created, :initial => true
+    state :enqueued
     state :running
     state :deploying
     state :failure
     state :success
   
-    event :run, :after => :enqueue_task do
-      transitions :from => [:created, :failure, :success], :to => :running
+    event :enqueue, :after => :enqueue_task do
+      transitions :from => [:created, :failure, :success], :to => :enqueued
+    end
+    
+    event :run do
+      after do
+        self.project.run!
+      end
+      
+      transitions :from => :enqueued, :to => :running
     end
     
     event :succeed do
