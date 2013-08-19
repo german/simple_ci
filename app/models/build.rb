@@ -13,13 +13,13 @@ class Build < ActiveRecord::Base
     state :failure
     state :success
   
-    event :enqueue, :after => :enqueue_task do
+    event :enqueue, :after => :enqueue_task do      
       transitions :from => [:created, :failure, :success], :to => :enqueued
     end
     
     event :run do
       after do
-        self.project.run!
+        self.project.run! if !self.project.running?
       end
       
       transitions :from => :enqueued, :to => :running

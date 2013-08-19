@@ -5,7 +5,21 @@ Simple CI system
 
 ## Installation
 
-First you need to install [rabbitmq](http://www.rabbitmq.com/download.html).
+Make sure you have all necessary gems installed:
+
+```sh
+bundle install
+```
+
+Also you need to install [rabbitmq](http://www.rabbitmq.com/download.html).
+
+Then create a database (SQLite would be sufficient for CI with 1-2 project):
+
+```sh
+rake db:create db:migrate db:seed
+```
+
+After running db:seed task you'll get a user with email 'simple_ci@example.com' and password: 'password. Also there would be a project created (which points to the current project, namely SimpleCI), so you could check how it works.
 
 Run rabbitmq-server from the first terminal window:
 
@@ -16,7 +30,6 @@ rabbitmq-server
 Then run from another terminal:
 
 ```sh
-bundle install
 unicorn_rails
 ```
 

@@ -40,7 +40,7 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 2.14.0'
-  gem 'mocha', :require => "mocha/setup"
+  gem 'mocha', :require => "mocha/api"
   gem 'shoulda'
 end
 
