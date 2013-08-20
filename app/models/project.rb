@@ -24,7 +24,7 @@ class Project < ActiveRecord::Base
     end
     
     event :fail do
-      transitions :from => :running, :to => :failure
+      transitions :from => [:enqueued, :running], :to => :failure
     end
       
     event :succeed do

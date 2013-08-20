@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   respond_to :html, :json
+  before_filter :authenticate_user!
   
   def index
     @projects = current_user.projects
@@ -10,6 +11,7 @@ class ProjectsController < ApplicationController
     @project.enqueue!
     respond_with(@project)
   rescue AASM::InvalidTransition => e
+    @project.fail!
     render nothing: true
   end
   
