@@ -7,6 +7,7 @@ describe Project do
     Build.any_instance.stubs(:enqueue_task).returns(true)
   end
 
+  it {should belong_to(:user)}
   it {should have_many(:builds)}
   
   it "have unique name and path on filesystem"
@@ -48,6 +49,44 @@ describe Project do
       subject.builds.last.run!
       subject.reload
       subject.running?.should be
+    end
+  end
+
+  context "failed state" do
+    before do
+      subject.enqueue!
+      subject.run!
+    end
+
+    it "is failling" do
+      subject.fail!
+      subject.failure?.should be
+    end
+
+    it "has build that switches project to the failure state (from different worker process)" do
+      subject.builds.last.run!
+      subject.builds.last.fail!
+      subject.reload
+      subject.failure?.should be
+    end
+  end
+
+  context "succeed state" do
+    before do
+      subject.enqueue!
+      subject.run!
+    end
+
+    it "is failling" do
+      subject.succeed!
+      subject.success?.should be
+    end
+
+    it "has build that switches project to the succeed state (from different worker process)" do
+      subject.builds.last.run!
+      subject.builds.last.succeed!
+      subject.reload
+      subject.success?.should be
     end
   end
 end
