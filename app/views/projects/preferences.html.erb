@@ -1,0 +1,11 @@
+<h3 style="text-align:center">Preferences</h3>
+
+<%= form_for @project do |f| %>
+  <%= render f %>
+  
+  <div class="row">
+    <div class="large-12 columns">
+      <%= f.submit "Save", class: "button" %>
+    </div>
+  </div>
+<% end %>
