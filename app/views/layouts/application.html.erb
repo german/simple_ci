@@ -8,6 +8,30 @@
 </head>
 <body>
 
+<nav class="top-bar">
+  <ul class="title-area"><li class="name"></li></ul>
+  <section class="top-bar-section">
+    <% if current_user %>
+    <ul class="left">
+      <li class="has-dropdown not-click"><a href="/projects">Go to Project</a>
+        <ul class="dropdown">
+          <% cache 'top_menu_projects_list' do %>
+          <% current_user.projects.each do |project| %>
+          <li><%= link_to project.name, projects_path(project) %></li>
+          <% end %>
+          <% end %>
+        </ul>
+      </li>
+    </ul>
+    
+    <ul class="right">
+      <li class="not-click"><a href="#"><%= current_user.email %></a></li>
+      <li><%= link_to "Log out", destroy_user_session_path %></a>
+    </ul>
+    <% end %>
+  </section>
+</nav>
+
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
 

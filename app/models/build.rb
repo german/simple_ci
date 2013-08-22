@@ -21,7 +21,7 @@ class Build < ActiveRecord::Base
       after do
         self.project.run! if !self.project.running?
       end
-      
+
       transitions :from => :enqueued, :to => :running
     end
     
