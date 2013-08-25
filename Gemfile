@@ -42,6 +42,8 @@ group :test do
   gem 'rspec-rails', '~> 2.14.0'
   gem 'mocha', :require => "mocha/api"
   gem 'shoulda'
+  gem 'capybara'
+  gem 'guard-rspec'
 end
 
 gem "devise", '~> 3.0'
