@@ -11,6 +11,6 @@ describe User do
   
 private
   def project_params
-    {name: "Test", path_to_rails_root: "/home/german/projects/ruby/simple_ci"}
+    {name: "Test", path_to_rails_root: Rails.root.to_s }
   end
 end

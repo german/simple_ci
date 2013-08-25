@@ -8,8 +8,11 @@ class ProjectsController < ApplicationController
 
   def update
     @project = current_user.projects.find_by!(id: params[:id])
-    @project.update_attributes!(project_params)
-    redirect_to projects_path #@project
+    if @project.update_attributes(project_params)
+      redirect_to projects_path, :notice => "Project sucessfully saved" #@project
+    else
+      redirect_to :back, :notice => "There were errors while saving project"
+    end
   end
     
   def enqueue

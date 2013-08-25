@@ -4,6 +4,9 @@ class Project < ActiveRecord::Base
   belongs_to :user
   has_many :builds
   
+  validates :name, :path_to_rails_root, presence: true
+  validates :path_to_rails_root, rails_project: true
+  
   aasm do
     state :created, :initial => true
     state :enqueued

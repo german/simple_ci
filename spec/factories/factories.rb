@@ -12,4 +12,9 @@ FactoryGirl.define do
     duration 0.456
     project
   end
+  
+  factory :user do
+    email 'simple_ci@example.com'
+    password '12345678'
+  end
 end
