@@ -1,5 +1,4 @@
 require "bunny"
-require 'benchmark'
 
 desc "Run all tasks from the queue"
 task :run_queue => :environment do
@@ -15,25 +14,9 @@ task :run_queue => :environment do
   begin
     q.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
       params = Marshal.load(body)
-      build = Build.find params[:build_id]
-      
       puts " [#{DEFAULT_QUEUE}] Received #{params.inspect}"
-      output = ""
-      build.run! # transition from :enqueued state to :running
-      duration = Benchmark.measure do
-        output = `rspec #{build.project.path_to_rails_root}/spec`
-      end
-      puts " [#{DEFAULT_QUEUE}] Done: #{output}"
-      
-      quick_output = output.lines.first.strip # ..F..*F*
-      build.update_attributes output: output, failed_tests: quick_output.count('F'), pending_tests: quick_output.count('*'), succeeded_tests: quick_output.count('.'), duration: duration.to_s.match(/\((?<real_time>[\d\. ]+)\)/)[:real_time].to_f
-      
-      if quick_output.count('F') > 0
-        build.fail!
-      else
-        build.succeed!
-      end
-      
+      BuildRunner.run params[:build_id]
+            
       ch.ack(delivery_info.delivery_tag)
     end
   rescue Interrupt => _

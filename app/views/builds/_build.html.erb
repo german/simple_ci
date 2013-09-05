@@ -1,0 +1,6 @@
+<div class="row">
+  <div class="small-4 columns <%= build.failure? ? 'alert' : 'success' %> label">build #<%= build.id %></div>
+  <div class="small-4 columns"><%= build.aasm_state %></div>
+  <div class="small-4 columns">run <%= time_ago_in_words build.updated_at %> ago</div>
+</div>
+<div class="radius progress success large-8" style="display: none;"><span class="meter" style="width: 0%;"></span></div>

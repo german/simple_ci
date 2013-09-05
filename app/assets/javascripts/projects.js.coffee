@@ -1,3 +1,8 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+$ ->
+  $(".run_project").on "ajax:success", (e, data, status, xhr) ->
+    $('.progress').show()
+    progressTimer = setInterval () ->
+      $.getJSON '/projects/1/check_status', (response) ->
+        console.log(response)
+        clearInterval(progressTimer) if response.status == 'success' || responce.status == 'failed'
+    , 500

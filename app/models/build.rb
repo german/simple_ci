@@ -18,26 +18,14 @@ class Build < ActiveRecord::Base
     end
     
     event :run do
-      after do
-        self.project.run! if !self.project.running?
-      end
-
       transitions :from => :enqueued, :to => :running
     end
     
-    event :succeed do
-      after do
-        self.project.succeed!
-      end
-      
+    event :succeed do      
       transitions :from => [:running, :deploying], :to => :success
     end
     
-    event :fail do
-      after do
-        self.project.fail!
-      end
-      
+    event :fail do      
       transitions :from => [:running, :deploying], :to => :failure
     end
     

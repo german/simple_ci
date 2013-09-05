@@ -17,9 +17,10 @@ class ProjectsController < ApplicationController
     
   def enqueue
     @project = current_user.projects.find_by!(id: params[:id])
-    @project.enqueue!
+    @project.builds.create!.enqueue!
     respond_to do |format|
       format.json { render json: @project }
+      format.html { redirect_to projects_path }
     end
   rescue AASM::InvalidTransition => e
     @project.fail!

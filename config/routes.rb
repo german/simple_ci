@@ -1,6 +1,8 @@
 SimpleCi::Application.routes.draw do
   devise_for :users
 
+  get 'projects/:id/check_status', to: ProjectStatusController.action(:check)
+
   resources :projects do
     member do
       get :enqueue, :preferences

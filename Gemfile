@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# Use mysql as the database for Active Record
+gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
@@ -40,16 +40,17 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 2.14.0'
+  gem 'factory_girl'
+  gem 'faker'
   gem 'mocha', :require => "mocha/api"
   gem 'shoulda'
   gem 'capybara'
   gem 'guard-rspec'
+  gem 'database_cleaner'
 end
 
 gem "devise", '~> 3.0'
-gem 'aasm'
-gem 'factory_girl'
-gem 'faker'
+gem 'aasm', '~> 3.0.22'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
