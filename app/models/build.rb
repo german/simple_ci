@@ -26,7 +26,7 @@ class Build < ActiveRecord::Base
     end
     
     event :fail do      
-      transitions :from => [:running, :deploying], :to => :failure
+      transitions :from => [:created, :running, :deploying], :to => :failure
     end
     
     event :deploy do

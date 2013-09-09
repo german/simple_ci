@@ -19,5 +19,8 @@ class BuildRunner
     else
       build.succeed!
     end
+  rescue => e
+    build.fail!
+    build.update_attributes output: (e.message + "\n\n" + e.backtrace.to_s)
   end
 end
