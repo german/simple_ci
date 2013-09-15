@@ -7,6 +7,10 @@ describe Project do
     Build.any_instance.stubs(:enqueue_task).returns(true)
   end
 
+  after do
+    BuildRunner.clear_files_after(subject.builds.last) if ! subject.builds.blank?
+  end
+  
   it {should belong_to(:user)}
   it {should have_many(:builds)}
   
