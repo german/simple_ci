@@ -16,8 +16,10 @@ class ProjectsController < ApplicationController
   end
     
   def enqueue
-    @project = current_user.projects.find_by!(id: params[:id])
-    @project.builds.create!.enqueue!
+    Build.transaction do
+      @project = current_user.projects.find_by!(id: params[:id])
+      @project.builds.create!.enqueue!
+    end
     respond_to do |format|
       format.json { render json: @project }
       format.html { redirect_to projects_path }
