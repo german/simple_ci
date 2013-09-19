@@ -14,7 +14,6 @@ describe Build do
       BuildRunner.run subject.id
     }.to change{ Dir.entries(Dir.tmpdir)}
     
-    project_dir = File.join BuildRunner.tmp_dir_for(subject), File.basename(subject.project.path_to_rails_root)
-    expect( Dir.entries project_dir ).to include('spec')
+    expect( Dir.entries subject.tmp_dir_with_project_name ).to include('spec')
   end
 end

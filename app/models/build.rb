@@ -47,4 +47,12 @@ class Build < ActiveRecord::Base
 
     conn.close
   end
+  
+  def tmp_dir
+    File.join TMP_DIR, "project#{self.project.id}"
+  end
+  
+  def tmp_dir_with_project_name
+    File.join tmp_dir, File.basename(self.project.path_to_rails_root)
+  end
 end

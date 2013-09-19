@@ -14,7 +14,7 @@ class BuildRunner
       build.run! # transition from :enqueued state to :running
     
       duration = Benchmark.measure do
-        output = `rspec #{tmp_dir_for(build)}/spec`
+        output = `rspec #{build.tmp_dir_with_project_name}/spec`
       end
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
     
@@ -28,30 +28,23 @@ class BuildRunner
       end
     rescue => e
       build.fail!
+      clear_files_after(build)
       build.update_attributes output: (e.message + "\n\n" + e.backtrace.to_s)
     end
 
     def prepare_tmp_dir_for(build)
       puts "preparing temp directory for the build #{build.id}" if Rails.env.development?
-      FileUtils.mkdir_p tmp_dir_for(build)
+      FileUtils.mkdir_p build.tmp_dir
     end
   
     def copy_files_for(build)
-      puts "copying files for the build #{build.id} from #{build.project.path_to_rails_root} into #{tmp_dir_for(build)}" if Rails.env.development?
-      FileUtils.cp_r(build.project.path_to_rails_root, tmp_dir_for(build))
+      puts "copying files for the build #{build.id} from #{build.project.path_to_rails_root} into #{build.tmp_dir}" if Rails.env.development?
+      FileUtils.cp_r build.project.path_to_rails_root, build.tmp_dir
     end
   
     def clear_files_after(build)
       puts "clearing files after build #{build.id}" if Rails.env.development?
-      FileUtils.rm_rf(tmp_dir_for(build))
-    end
-  
-    def tmp_dir_for(build)
-      File.join tmp_dir, "project#{build.project.id}"
-    end
-  
-    def tmp_dir
-      Dir.tmpdir
+      FileUtils.rm_rf build.tmp_dir
     end
   end
 end

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :project do
     name 'Simple CI'
-    path_to_rails_root Rails.root.to_s
+    path_to_rails_root File.expand_path(File.join(__FILE__, '..', 'fixtures', 'test_app')).to_s
   end
   
   factory :build do
