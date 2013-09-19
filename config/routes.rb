@@ -1,18 +1,12 @@
 SimpleCi::Application.routes.draw do
   devise_for :users
 
-  get 'projects/:id/check_status', to: ProjectStatusController.action(:check)
-
   resources :projects do
     member do
-      get :enqueue, :preferences
+      get :enqueue, :preferences, :check_status
     end
   end
   
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
   root :to => 'projects#index'
 
   # Example of regular route:

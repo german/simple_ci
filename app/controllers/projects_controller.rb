@@ -31,6 +31,10 @@ class ProjectsController < ApplicationController
     @project = Project.find_by!(id: params[:id])
   end
   
+  def check_status
+    project = Project.find params[:id]
+    render json: {status: project.state}
+  end
 private
   def project_params
     params.require(:project).permit(:name, :path_to_rails_root)
