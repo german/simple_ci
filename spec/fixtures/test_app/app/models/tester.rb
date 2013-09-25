@@ -1,4 +1,4 @@
-class User
+class Tester
   attr_accessor :first_name, :last_name
 
   def full_name

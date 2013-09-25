@@ -14,7 +14,10 @@ class BuildRunner
       build.run! # transition from :enqueued state to :running
     
       duration = Benchmark.measure do
-        output = `rspec #{build.tmp_dir_with_project_name}/spec`
+        puts 'build.tmp_dir_with_project_name - ' + build.tmp_dir_with_project_name.inspect
+        # TODO find_rspec
+        # TODO run bundle install
+        output = `cd #{build.tmp_dir_with_project_name} && rspec #{build.tmp_dir_with_project_name}/spec`
       end
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
     
@@ -31,7 +34,7 @@ class BuildRunner
       clear_files_after(build)
       build.update_attributes output: (e.message + "\n\n" + e.backtrace.to_s)
     end
-
+    
     def prepare_tmp_dir_for(build)
       puts "preparing temp directory for the build #{build.id}" if Rails.env.development?
       FileUtils.mkdir_p build.tmp_dir

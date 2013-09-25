@@ -5,6 +5,8 @@ class Build < ActiveRecord::Base
   
   belongs_to :project
   
+  after_commit :enqueue_task, on: :update, if: lambda {|build| build.enqueued? }
+    
   aasm do
     state :created, :initial => true
     state :enqueued
@@ -13,7 +15,7 @@ class Build < ActiveRecord::Base
     state :failure
     state :success
   
-    event :enqueue, :after => :enqueue_task do      
+    event :enqueue do      
       transitions :from => [:created, :failure, :success], :to => :enqueued
     end
     

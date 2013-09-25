@@ -14,4 +14,4 @@
   </div>
 </div>
   
-<%= render :partial => "builds/build", collection: project.builds.order('updated_at DESC').limit(5), locals: {last_build: false} %>
+<%= render :partial => "builds/build", collection: project.builds.order('updated_at DESC').limit(5) %>
