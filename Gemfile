@@ -33,6 +33,12 @@ gem 'bunny'
 # Use unicorn as the app server
 gem 'unicorn'
 
+# Official OmniAuth strategy for GitHub.
+gem 'omniauth-github', '~> 1.1.1'
+
+# Protect attributes from mass assignment
+gem 'protected_attributes', '~> 1.0.3'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -49,7 +55,7 @@ group :test do
   gem 'database_cleaner'
 end
 
-gem "devise", '~> 3.0'
+gem 'devise', '~> 3.0'
 gem 'aasm', '~> 3.0.22'
 
 # Use ActiveModel has_secure_password
