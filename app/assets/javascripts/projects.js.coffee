@@ -9,6 +9,7 @@ $ ->
         if response.reference_duration
           time_elapsed = new Date().getTime() - start_build_time
           progress = ((time_elapsed / 1000 / response.reference_duration) * 100.0)
+          progress = 100.0 if progress > 100.0
           $('.last_build .progress .meter').css({width: (progress + '%')})
         
         if response.status == 'success' || response.status == 'failure'

@@ -4,6 +4,16 @@
 </div>
 
 <div class="row">
-  <div class="large-3 columns">Path to Rails root:</div>
+  <div class="large-3 columns">Path to Rails root:<br/>Or url of Github repo</div>
   <div class="large-9 columns"><%= form.text_field :path_to_rails_root %></div>
+</div>
+
+<div class="row">
+  <div class="large-3 columns">Operate on branch:</div>
+  <div class="large-9 columns"><%= form.text_field :branch %></div>
+</div>
+
+<div class="row">
+  <div class="large-3 columns">Run `bundle install` before each build:</div>
+  <div class="large-9 columns"><%= form.check_box :run_bundle_before_builds %></div>
 </div>

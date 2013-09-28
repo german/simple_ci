@@ -8,8 +8,13 @@ class BuildRunner
       build = Build.find id
       
       self.prepare_tmp_dir_for(build)
-      self.copy_files_for(build)
-    
+      
+      self.cd_project_dir(build)
+      
+      self.do_in_branch(build.project.branch) do
+        self.copy_files_for(build)
+      end
+
       output = ""
       build.run! # transition from :enqueued state to :running
     
@@ -39,6 +44,17 @@ class BuildRunner
       build.fail!
       clear_files_after(build)
       build.update_attributes output: (e.message + "\n\n" + e.backtrace.to_s)
+    end
+    
+    def cd_project_dir(build)
+      `cd #{build.project.path_to_rails_root}`
+    end
+    
+    def do_in_branch(branch_name)
+      original_branch = `git branch`.split(/$/).detect{|b| b[0] == '*'}.match(/\w+/)[0]
+      `git checkout #{branch_name}`
+      yield
+      `git checkout #{original_branch}`
     end
     
     def prepare_tmp_dir_for(build)

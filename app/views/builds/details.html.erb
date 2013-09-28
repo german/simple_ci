@@ -1,1 +1,6 @@
+<%= link_to raw("&#x2190; Back to builds list"), projects_path(@build.project) %>
+
+<div style="clear:both"></div>
+<h3>Build #<%= @build.id %> Output</h3>
+
 <pre><%= @build.output %></pre>
