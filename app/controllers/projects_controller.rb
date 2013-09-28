@@ -16,10 +16,8 @@ class ProjectsController < ApplicationController
   end
     
   def enqueue
-    Build.transaction do
-      @project = current_user.projects.find_by!(id: params[:id])
-      @project.builds.create!.enqueue!
-    end
+    @project = current_user.projects.find_by!(id: params[:id])
+    @project.builds.create!.enqueue!
     respond_to do |format|
       format.json { render json: @project }
       format.html { redirect_to projects_path }
@@ -35,7 +33,8 @@ class ProjectsController < ApplicationController
   
   def check_status
     project = Project.find params[:id]
-    render json: {status: project.state}
+    last_successfull_build = project.builds.where(['aasm_state = ?', 'success']).order('updated_at ASC').last
+    render json: {status: project.state, reference_duration: last_successfull_build.try(:duration)}
   end
 private
   def project_params

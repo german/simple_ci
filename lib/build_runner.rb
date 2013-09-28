@@ -14,7 +14,6 @@ class BuildRunner
       build.run! # transition from :enqueued state to :running
     
       duration = Benchmark.measure do
-        puts 'build.tmp_dir_with_project_name - ' + build.tmp_dir_with_project_name.inspect
         # TODO find_rspec
         # TODO run bundle install
         output = `cd #{build.tmp_dir_with_project_name} && rspec #{build.tmp_dir_with_project_name}/spec`
@@ -22,13 +21,20 @@ class BuildRunner
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
     
       quick_output = output.lines.first.strip # ..F..*F*
-      build.update_attributes output: output, failed_tests: quick_output.count('F'), pending_tests: quick_output.count('*'), succeeded_tests: quick_output.count('.'), duration: duration.to_s.match(/\((?<real_time>[\d\. ]+)\)/)[:real_time].to_f
-    
+      
+      build.output = output
+      build.failed_tests = quick_output.count('F')
+      build.pending_tests = quick_output.count('*')
+      build.succeeded_tests = quick_output.count('.')
+      build.duration = duration.to_s.match(/\((?<real_time>[\d\. ]+)\)/)[:real_time].to_f
+      build.save
+
       if quick_output.count('F') > 0
         build.fail!
       else
         build.succeed!
       end
+      clear_files_after(build)
     rescue => e
       build.fail!
       clear_files_after(build)

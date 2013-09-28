@@ -5,6 +5,8 @@ class Build < ActiveRecord::Base
   
   belongs_to :project
   
+  # we should enqueue build only after it's fully changed its state (e.g. will have aasm_state attribute set to 'enqueued')
+  # so worker script could find it and invoke `run!` properly (otherwise transision errors)
   after_commit :enqueue_task, on: :update, if: lambda {|build| build.enqueued? }
     
   aasm do

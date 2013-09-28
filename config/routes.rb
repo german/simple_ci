@@ -2,6 +2,12 @@ SimpleCi::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
 
   resources :projects do
+    resources :builds do
+      member do
+        get :details
+      end
+    end
+    
     member do
       get :enqueue, :preferences, :check_status
     end
