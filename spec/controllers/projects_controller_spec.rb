@@ -38,7 +38,7 @@ describe ProjectsController do
                
         t1.join
         t2.join
-        expect(project.state).to eq('failure')
+        expect(project.state).to eq('success')
       end
     end
 

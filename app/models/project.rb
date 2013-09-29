@@ -1,4 +1,6 @@
-class Project < ActiveRecord::Base  
+class Project < ActiveRecord::Base
+  attr_accessible :user_id, :name, :path_to_rails_root, :aasm_state, :run_bundle_before_builds, :branch
+  
   belongs_to :user
   has_many :builds
   

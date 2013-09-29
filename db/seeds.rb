@@ -16,7 +16,7 @@ else
 end
 
 if Project.count == 0
-  if Project.create!(name: 'Simple CI', path_to_rails_root: Rails.root.join('spec','fixtures','test_app').to_s, user: user)
+  if Project.create!(name: 'Simple CI', path_to_rails_root: Rails.root.join('vendor','test_app').to_s, user: user)
     puts "Project 'Simple CI' was created."
   end
 end

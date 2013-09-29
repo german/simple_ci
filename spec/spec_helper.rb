@@ -49,9 +49,3 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
-
-module Kernel
-  def `(string)
-    "..........F...**..\nFinished in 23.36 seconds\n18 examples, 1 failure, 2 pending"
-  end
-end

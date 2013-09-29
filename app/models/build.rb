@@ -1,6 +1,8 @@
 require "bunny"
 
 class Build < ActiveRecord::Base
+  attr_accessible :output, :duration, :failed_tests, :pending_tests, :succeeded_tests
+  
   include AASM
   
   belongs_to :project
@@ -53,7 +55,7 @@ class Build < ActiveRecord::Base
   end
   
   def tmp_dir
-    File.join TMP_DIR, "project#{self.project.id}"
+    File.join TMP_DIR, "project_#{self.project.id}_#{self.project.branch}"
   end
   
   def tmp_dir_with_project_name

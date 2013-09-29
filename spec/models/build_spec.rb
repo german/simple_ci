@@ -9,11 +9,11 @@ describe Build do
   
   it {should belong_to(:project)}
   
-  it "copies project to temp directory" do
+  it "copies project to temp directory and cleanes it up after the build" do
+    subject.enqueue!
+    
     expect {
       BuildRunner.run subject.id
-    }.to change{ Dir.entries(Dir.tmpdir)}
-    
-    expect( Dir.entries subject.tmp_dir_with_project_name ).to include('spec')
+    }.not_to change{ Dir.entries(TMP_DIR)}
   end
 end
