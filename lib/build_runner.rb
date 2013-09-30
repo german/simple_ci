@@ -7,12 +7,12 @@ class BuildRunner
     def run(id)
       build = Build.find id
       
-      prepare_tmp_dir_for(build)
+      prepare_tmp_dir_for build
 
-      cd_project_dir(build)
+      cd_project_dir build
 
-      do_in_branch(build.project.branch) do
-        copy_files_for(build)
+      do_in_branch build.project.branch do
+        copy_files_for build
       end
 
       output = ""
@@ -21,7 +21,11 @@ class BuildRunner
       duration = Benchmark.measure do
         # TODO find_rspec
         # TODO run bundle install
-        output = `cd #{build.tmp_dir_with_project_name} && rspec #{build.tmp_dir_with_project_name}/spec`
+        run_commands = []
+        run_commands << "bundle install" if build.project.run_bundle_before_builds
+        run_commands << "rspec #{build.tmp_dir_with_project_name}/spec"
+        
+        output = `cd #{build.tmp_dir_with_project_name} && #{run_commands.join(' && ')}`
       end
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
 
