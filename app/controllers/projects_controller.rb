@@ -6,6 +6,19 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects
   end
 
+  def new
+    @project = Project.new
+  end
+
+  def create
+    @project = current_user.projects.build(project_params)
+    if @project.save
+      redirect_to projects_path, :notice => "Project sucessfully created" #@project
+    else
+      redirect_to :back, :notice => "There were errors while creating project"
+    end
+  end
+
   def update
     @project = current_user.projects.find_by!(id: params[:id])
     if @project.update_attributes(project_params)
@@ -36,8 +49,9 @@ class ProjectsController < ApplicationController
     last_successfull_build = project.builds.where(['aasm_state = ?', 'success']).order('updated_at ASC').last
     render json: {status: project.state, reference_duration: last_successfull_build.try(:duration)}
   end
+
 private
   def project_params
-    params.require(:project).permit(:name, :path_to_rails_root)
+    params.require(:project).permit(:name, :path_to_rails_root, :copy_before_builds, :run_bundle_before_builds, :branch)
   end
 end

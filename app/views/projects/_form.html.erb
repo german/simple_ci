@@ -14,6 +14,11 @@
 </div>
 
 <div class="row">
-  <div class="large-3 columns">Run `bundle install` before each build:</div>
+  <div class="large-3 columns">Run `bundle install` before build:</div>
   <div class="large-9 columns"><%= form.check_box :run_bundle_before_builds %></div>
+</div>
+
+<div class="row">
+  <div class="large-3 columns">Copy to temp folder before build:</div>
+  <div class="large-9 columns"><%= form.check_box :copy_before_builds %></div>
 </div>

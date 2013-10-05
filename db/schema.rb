@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130928115145) do
+ActiveRecord::Schema.define(version: 20131005183328) do
 
   create_table "builds", force: true do |t|
     t.text     "output"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20130928115145) do
     t.datetime "updated_at"
     t.boolean  "run_bundle_before_builds", default: false
     t.string   "branch",                   default: "master"
+    t.boolean  "copy_before_builds",       default: false
   end
 
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
