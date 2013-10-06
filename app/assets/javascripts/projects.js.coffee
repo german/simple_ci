@@ -4,7 +4,7 @@ $ ->
     $('.last_build .progress').show()
     start_build_time = new Date().getTime()
     progressTimer = setInterval () ->
-      $.getJSON '/projects/1/check_status', (response) ->
+      $.getJSON '/projects/'+data.id+'/check_status', (response) ->
         # show progress of the build
         if response.reference_duration
           time_elapsed = new Date().getTime() - start_build_time

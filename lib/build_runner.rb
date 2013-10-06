@@ -13,7 +13,7 @@ class BuildRunner
 
       do_in_branch build.project.branch do
         copy_files_for build
-      end
+      end if build.project.copy_before_builds
 
       output = ""
       build.run! # transition from :enqueued state to :running
@@ -23,13 +23,13 @@ class BuildRunner
         # TODO run bundle install
         run_commands = []
         run_commands << "bundle install" if build.project.run_bundle_before_builds
-        run_commands << "rspec #{build.tmp_dir_with_project_name}/spec"
+        run_commands << "rspec #{build_in_folder(build)}/spec"
         
-        output = `cd #{build.tmp_dir_with_project_name} && #{run_commands.join(' && ')}`
+        output = `cd #{build_in_folder(build)} && #{run_commands.join(' && ')}`
       end
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
 
-      quick_output = output.lines.first.strip # ..F..*F*
+      quick_output = output.lines.try(:first).to_.strip # ..F..*F*
       
       build.update_attributes output: output, failed_tests: quick_output.count('F'), pending_tests: quick_output.count('*'), succeeded_tests: quick_output.count('.'), duration: duration.to_s.match(/\((?<real_time>[\d\. ]+)\)/)[:real_time].to_f
 
@@ -72,6 +72,10 @@ class BuildRunner
       FileUtils.rm_rf build.tmp_dir
     end
     
+    def build_in_folder(build)
+      build.project.copy_before_builds ? build.tmp_dir_with_project_name : build.project.path_to_rails_root
+    end
+
     def log text
       puts text if Rails.env.development?
     end
