@@ -39,6 +39,9 @@ gem 'omniauth-github', '~> 1.1.1'
 # Protect attributes from mass assignment
 gem 'protected_attributes', '~> 1.0.3'
 
+# to change location to tested directory and run specs inside it
+gem 'rvm'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

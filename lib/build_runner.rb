@@ -1,5 +1,6 @@
 require 'benchmark'
 require 'fileutils'
+require 'rvm'
 
 class BuildRunner
   class << self
@@ -9,7 +10,7 @@ class BuildRunner
       
       prepare_tmp_dir_for build
 
-      cd_project_dir build
+      cd_project_dir(build) if build.project.copy_before_builds
 
       do_in_branch build.project.branch do
         copy_files_for build
@@ -22,14 +23,17 @@ class BuildRunner
         # TODO find_rspec
         # TODO run bundle install
         run_commands = []
+        run_commands << "cd #{build_in_folder(build)}"
         run_commands << "bundle install" if build.project.run_bundle_before_builds
-        run_commands << "rspec #{build_in_folder(build)}/spec"
+        run_commands << "bundle exec rspec"
         
-        output = `cd #{build_in_folder(build)} && #{run_commands.join(' && ')}`
+        RVM.use_from_path! build.project.path_to_rails_root do
+          output = `#{run_commands.join(' && ')}`
+        end
       end
       puts " [#{DEFAULT_QUEUE}] Done: #{output}" if !Rails.env.test?
 
-      quick_output = output.lines.try(:first).to_.strip # ..F..*F*
+      quick_output = output.lines.try(:first).to_s.strip # ..F..*F*
       
       build.update_attributes output: output, failed_tests: quick_output.count('F'), pending_tests: quick_output.count('*'), succeeded_tests: quick_output.count('.'), duration: duration.to_s.match(/\((?<real_time>[\d\. ]+)\)/)[:real_time].to_f
 
