@@ -7,6 +7,7 @@ class BuildRunner
     
     def run(id)
       build = Build.find id
+      return if !build || !build.enqueued?
       
       prepare_tmp_dir_for build
 
