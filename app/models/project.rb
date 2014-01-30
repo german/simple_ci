@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  attr_accessible :user_id, :name, :path_to_rails_root, :aasm_state, :run_bundle_before_builds, :branch
+  attr_accessible :user_id, :name, :path_to_rails_root, :aasm_state, :run_bundle_before_builds, :branch, :copy_before_builds
   
   belongs_to :user
   has_many :builds
